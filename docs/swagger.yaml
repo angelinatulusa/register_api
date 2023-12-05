@@ -1,0 +1,131 @@
+openapi: 3.0.2
+info:
+    title: register-api
+    version: 1.0.0
+    description: '### See on töötajate nimekirjaga projekt'
+paths:
+    /kasutajad:
+        get:
+            tags:
+                - kasuatajad
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Kasutajate nimekirja:
+                                    value:
+                                        - 1kasutaja
+                                        - 2kasutaja
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/new-user'
+            deprecated: false
+            summary: hankige kõigi kasutajate loend
+            description: tagastab kõigi kasutajate loendi
+        post:
+            parameters:
+                -
+                    name: nimi
+                    description: ''
+                    schema:
+                        type: string
+                    in: header
+                    required: true
+                -
+                    name: tootajatekood
+                    description: ''
+                    schema:
+                        type: number
+                    in: header
+                    required: true
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/new-user'
+                            examples:
+                                new:
+                                    value:
+                                        nimi: kasutaja
+                                        tootajatekood: '12314'
+                                        aeg: '19:35'
+    '/kasutajad/{id}':
+        get:
+            tags:
+                - details
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Antud kasutaja ID täielikud andmed:
+                                    value: |-
+                                        {id: 1, nimi: "1kasutaja", tootajatekood: 12345, aeg: '12:45'},
+                                            {id: 2, nimi: "2kasutaja", tootajatekood: 12122, aeg: '11:27'}
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+            operationId: id
+            summary: hankige kasutajate täielikud andmed
+            description: tagastab antud kasutaja ID täielikud andmed
+        delete:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/delete-game'
+                '204': {}
+                '404': {}
+components:
+    schemas:
+        error:
+            title: Root Type for error
+            description: ''
+            type: object
+            properties:
+                error:
+                    type: string
+            example:
+                error: Error message
+        new-user:
+            title: Root Type for new-user
+            description: ''
+            required:
+                - nimi
+                - tootajatekood
+            type: object
+            properties:
+                nimi:
+                    type: string
+                tootajatekood:
+                    type: number
+            example:
+                nimi: kasutaja
+                tootajatekood: '12314'
+                aeg: '19:35'
+        delete-game:
+            description: ''
+            required:
+                - id
+            type: object
+            properties:
+                id:
+                    description: ''
+                    type: string
+            example:
+                id: 1
