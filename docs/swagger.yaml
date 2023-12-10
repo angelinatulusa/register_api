@@ -46,17 +46,21 @@ paths:
                     in: header
                     required: true
             responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/new-user'
                 '201':
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/new-user'
-                            examples:
-                                new:
-                                    value:
-                                        nimi: kasutaja
-                                        tootajatekood: '12314'
-                                        aeg: '19:35'
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
     '/kasutajad/{id}':
         get:
             tags:
@@ -73,7 +77,7 @@ paths:
                                 Antud kasutaja ID täielikud andmed:
                                     value: |-
                                         {id: 1, nimi: "1kasutaja", tootajatekood: 12345, aeg: '12:45'},
-                                            {id: 2, nimi: "2kasutaja", tootajatekood: 12122, aeg: '11:27'}
+                                            {id: 2, nimi: "2kasutaja", tootajatekood: 12122, aeg: '11:27'},
                 '404':
                     content:
                         application/json:
@@ -82,7 +86,31 @@ paths:
             operationId: id
             summary: hankige kasutajate täielikud andmed
             description: tagastab antud kasutaja ID täielikud andmed
+        put:
+            parameters:
+                -
+                    name: nimi
+                    description: ''
+                    schema:
+                        type: string
+                    in: header
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/find-user'
+                '404': {}
         delete:
+            parameters:
+                -
+                    name: id
+                    description: ''
+                    schema:
+                        type: number
+                    in: header
+                    required: true
             responses:
                 '200':
                     content:
@@ -117,7 +145,7 @@ components:
             example:
                 nimi: kasutaja
                 tootajatekood: '12314'
-                aeg: '19:35'
+                aeg: '2022-12-27 08:26:49.219717'
         delete-game:
             description: ''
             required:
@@ -127,5 +155,10 @@ components:
                 id:
                     description: ''
                     type: string
+            example:
+                id: 1
+        find-user:
+            description: ''
+            type: object
             example:
                 id: 1
